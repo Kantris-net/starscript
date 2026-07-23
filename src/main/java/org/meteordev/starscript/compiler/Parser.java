@@ -290,14 +290,51 @@ public class Parser {
         return null;
     }
 
-    private boolean match(Token... tokens) {
-        for (Token token : tokens) {
-            if (check(token)) {
-                advance();
-                return true;
-            }
+    private boolean match(Token token) {
+        if (check(token)) {
+            advance();
+            return true;
         }
+        return false;
+    }
 
+    private boolean match(Token t1, Token t2) {
+        if (check(t1)) { advance(); return true; }
+        if (check(t2)) { advance(); return true; }
+        return false;
+    }
+
+    private boolean match(Token t1, Token t2, Token t3) {
+        if (check(t1)) { advance(); return true; }
+        if (check(t2)) { advance(); return true; }
+        if (check(t3)) { advance(); return true; }
+        return false;
+    }
+
+    private boolean match(Token t1, Token t2, Token t3, Token t4) {
+        if (check(t1)) { advance(); return true; }
+        if (check(t2)) { advance(); return true; }
+        if (check(t3)) { advance(); return true; }
+        if (check(t4)) { advance(); return true; }
+        return false;
+    }
+
+    private boolean match(Token t1, Token t2, Token t3, Token t4, Token t5) {
+        if (check(t1)) { advance(); return true; }
+        if (check(t2)) { advance(); return true; }
+        if (check(t3)) { advance(); return true; }
+        if (check(t4)) { advance(); return true; }
+        if (check(t5)) { advance(); return true; }
+        return false;
+    }
+
+    private boolean match(Token t1, Token t2, Token t3, Token t4, Token t5, Token t6) {
+        if (check(t1)) { advance(); return true; }
+        if (check(t2)) { advance(); return true; }
+        if (check(t3)) { advance(); return true; }
+        if (check(t4)) { advance(); return true; }
+        if (check(t5)) { advance(); return true; }
+        if (check(t6)) { advance(); return true; }
         return false;
     }
 
