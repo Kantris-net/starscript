@@ -6,6 +6,10 @@ public class Stack<T> {
     private int size;
 
     public void clear() {
+        size = 0;
+    }
+
+    public void clearAndNull() {
         for (int i = 0; i < size; i++) items[i] = null;
         size = 0;
     }
