@@ -114,18 +114,16 @@ public class Value {
 
     @Override
     public int hashCode() {
-        int result = 31 * super.hashCode();
-
         switch (type) {
-            case Boolean:  result += java.lang.Boolean.hashCode(getBool()); break;
-            case Number:   result += Double.hashCode(getNumber()); break;
-            case String:   result += getString().hashCode(); break;
-            case Function: result += getFunction().hashCode(); break;
-            case Map:      result += getMap().hashCode(); break;
-            case Object:   result += getObject().hashCode(); break;
+            case Null:     return 0;
+            case Boolean:  return java.lang.Boolean.hashCode(getBool());
+            case Number:   return Double.hashCode(getNumber());
+            case String:   return getString().hashCode();
+            case Function: return System.identityHashCode(getFunction());
+            case Map:      return System.identityHashCode(getMap());
+            case Object:   return getObject().hashCode();
+            default:       return 0;
         }
-
-        return result;
     }
 
     @Override
