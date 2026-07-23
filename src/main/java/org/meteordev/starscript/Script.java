@@ -10,10 +10,10 @@ import java.util.Map;
 
 /** Compiled representation of starscript code that can be run inside {@link Starscript}. */
 public class Script {
-    public byte[] code = new byte[8];
+    public byte[] code = new byte[64];
     private int size;
 
-    public final List<Value> constants = new ArrayList<>();
+    public final List<Value> constants = new ArrayList<>(32);
     private final Map<Value, Integer> constantCache = new HashMap<>();
 
     private void write(int b) {

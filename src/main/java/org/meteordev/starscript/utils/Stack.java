@@ -2,7 +2,7 @@ package org.meteordev.starscript.utils;
 
 public class Stack<T> {
     @SuppressWarnings("unchecked")
-    private T[] items = (T[]) new Object[8];
+    private T[] items = (T[]) new Object[64];
     private int size;
 
     public void clear() {
