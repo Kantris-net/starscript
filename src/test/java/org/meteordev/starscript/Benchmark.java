@@ -14,15 +14,15 @@ import java.util.Formatter;
 import java.util.concurrent.TimeUnit;
 
 /*
-Here are the results of the benchmark below ran on my machine with JDK 17.0.5
+Here are the results of the benchmark below ran on my machine with JDK 26.0.1
 
-Benchmark              Mode  Cnt  Score   Error   Units
-Benchmark.format      thrpt    3  1,417 � 0,766  ops/us
-Benchmark.formatter   thrpt    3  2,161 � 0,448  ops/us
-Benchmark.starscript  thrpt    3  7,423 � 1,771  ops/us
-Benchmark.format       avgt    3  0,707 � 0,262   us/op
-Benchmark.formatter    avgt    3  0,469 � 0,273   us/op
-Benchmark.starscript   avgt    3  0,141 � 0,051   us/op
+Benchmark              Mode  Cnt   Score    Error   Units
+Benchmark.format      thrpt   10   7.290 ±  0.218  ops/us
+Benchmark.formatter   thrpt   10   7.812 ±  0.257  ops/us
+Benchmark.starscript  thrpt   10  11.939 ±  0.082  ops/us
+Benchmark.format       avgt   10   0.137 ±  0.003   us/op
+Benchmark.formatter    avgt   10   0.130 ±  0.007   us/op
+Benchmark.starscript   avgt   10   0.084 ±  0.001   us/op
  */
 
 @BenchmarkMode({Mode.AverageTime, Mode.Throughput})
@@ -31,11 +31,12 @@ Benchmark.starscript   avgt    3  0,141 � 0,051   us/op
 public class Benchmark {
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .warmupIterations(3)
-                .measurementIterations(3)
-                .warmupTime(TimeValue.seconds(3))
-                .measurementTime(TimeValue.seconds(3))
-                .forks(1)
+                .include(Benchmark.class.getSimpleName())
+                .warmupIterations(5)
+                .measurementIterations(5)
+                .warmupTime(TimeValue.seconds(1))
+                .measurementTime(TimeValue.seconds(1))
+                .forks(2)
                 .build();
 
         new Runner(opt).run();
