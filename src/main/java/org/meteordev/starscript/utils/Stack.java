@@ -9,11 +9,6 @@ public class Stack<T> {
         size = 0;
     }
 
-    public void clearAndNull() {
-        for (int i = 0; i < size; i++) items[i] = null;
-        size = 0;
-    }
-
     @SuppressWarnings("unchecked")
     public void push(T item) {
         if (size >= items.length) {
