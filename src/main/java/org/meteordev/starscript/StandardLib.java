@@ -26,6 +26,9 @@ public class StandardLib {
         ss.set("floor", StandardLib::floor);
         ss.set("ceil", StandardLib::ceil);
         ss.set("abs", StandardLib::abs);
+        ss.set("min", StandardLib::min);
+        ss.set("max", StandardLib::max);
+        ss.set("clamp", StandardLib::clamp);
         ss.set("random", StandardLib::random);
 
         // Strings
@@ -91,6 +94,28 @@ public class StandardLib {
         if (argCount != 1) ss.error("abs() requires 1 argument, got %d.", argCount);
         double a = ss.popNumber("Argument to abs() needs to be a number.");
         return Value.number(Math.abs(a));
+    }
+
+    public static Value min(Starscript ss, int argCount) {
+        if (argCount != 2) ss.error("min() requires 2 arguments, got %d.", argCount);
+        double b = ss.popNumber("Second argument to min() needs to be a number.");
+        double a = ss.popNumber("First argument to min() needs to be a number.");
+        return Value.number(Math.min(a, b));
+    }
+
+    public static Value max(Starscript ss, int argCount) {
+        if (argCount != 2) ss.error("max() requires 2 arguments, got %d.", argCount);
+        double b = ss.popNumber("Second argument to max() needs to be a number.");
+        double a = ss.popNumber("First argument to max() needs to be a number.");
+        return Value.number(Math.max(a, b));
+    }
+
+    public static Value clamp(Starscript ss, int argCount) {
+        if (argCount != 3) ss.error("clamp() requires 3 arguments, got %d.", argCount);
+        double c = ss.popNumber("Third argument to clamp() needs to be a number.");
+        double b = ss.popNumber("Second argument to clamp() needs to be a number.");
+        double a = ss.popNumber("First argument to clamp() needs to be a number.");
+        return Value.number(Math.max(b, Math.min(c, a)));
     }
 
     public static Value random(Starscript ss, int argCount) {
