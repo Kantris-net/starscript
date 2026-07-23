@@ -3,16 +3,23 @@ package org.meteordev.starscript;
 import org.meteordev.starscript.value.Value;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.IllegalFormatException;
+import java.util.Random;
+import java.util.TimeZone;
 
-/** Standard library with some default functions and variables. */
+/**
+ * Standard library with some default functions and variables.
+ */
 public class StandardLib {
     private static final Random rand = new Random();
 
     public static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd. MM. yyyy");
 
-    /** Adds the functions and variables to the provided {@link Starscript} instance. */
+    /**
+     * Adds the functions and variables to the provided {@link Starscript} instance.
+     */
     public static void init(Starscript ss) {
         // Variables
         ss.set("PI", Math.PI);
@@ -47,15 +54,13 @@ public class StandardLib {
         if (argCount == 1) {
             double a = ss.popNumber("Argument to round() needs to be a number.");
             return Value.number(Math.round(a));
-        }
-        else if (argCount == 2) {
+        } else if (argCount == 2) {
             double b = ss.popNumber("Second argument to round() needs to be a number.");
             double a = ss.popNumber("First argument to round() needs to be a number.");
 
             double x = Math.pow(10, (int) b);
             return Value.number(Math.round(a * x) / x);
-        }
-        else {
+        } else {
             ss.error("round() requires 1 or 2 arguments, got %d.", argCount);
             return null;
         }
@@ -65,15 +70,13 @@ public class StandardLib {
         if (argCount == 1) {
             double a = ss.popNumber("Argument to round() needs to be a number.");
             return Value.string(Double.toString(Math.round(a)));
-        }
-        else if (argCount == 2) {
+        } else if (argCount == 2) {
             double b = ss.popNumber("Second argument to round() needs to be a number.");
             double a = ss.popNumber("First argument to round() needs to be a number.");
 
             double x = Math.pow(10, (int) b);
             return Value.string(Double.toString(Math.round(a * x) / x));
-        }
-        else {
+        } else {
             ss.error("round() requires 1 or 2 arguments, got %d.", argCount);
             return null;
         }
@@ -184,8 +187,7 @@ public class StandardLib {
             int padLength = width - text.length();
             for (int i = 0; i < padLength; i++) padded[i] = ' ';
             for (int i = 0; i < text.length(); i++) padded[padLength + i] = text.charAt(i);
-        }
-        else {
+        } else {
             for (int i = 0; i < text.length(); i++) padded[i] = text.charAt(i);
             for (int i = 0; i < Math.abs(width) - text.length(); i++) padded[text.length() + i] = ' ';
         }
@@ -196,7 +198,8 @@ public class StandardLib {
     // Formatters
 
     public static Value formatDateTime(Starscript ss, int argCount) {
-        if (argCount < 1 || argCount > 2) ss.error("formatTime(fmt, timezone) requires 1 to 2 arguments, got %d.", argCount);
+        if (argCount < 1 || argCount > 2)
+            ss.error("formatTime(fmt, timezone) requires 1 to 2 arguments, got %d.", argCount);
         try {
             String timeZone = null;
             if (argCount == 2) timeZone = ss.popString("Argument to formatTime(fmt, timezone) needs to be a string.");
@@ -204,8 +207,7 @@ public class StandardLib {
             SimpleDateFormat formatter = new SimpleDateFormat(fmt);
             if (timeZone != null && !timeZone.isEmpty()) formatter.setTimeZone(TimeZone.getTimeZone(timeZone));
             return Value.string(formatter.format(new Date()));
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             ss.error(e.toString());
         }
         return Value.null_();
@@ -213,8 +215,8 @@ public class StandardLib {
 
     public static Value format(Starscript ss, int argCount) {
         if (argCount < 1) ss.error("format(fmt, ...args) requires at least 1 argument, got %d.", argCount);
-        Object[] args = new Object[argCount];
-        for (int i = argCount - 1; i >= 1; i --) {
+        Object[] args = new Object[argCount - 1];
+        for (int i = argCount - 2; i >= 0; i--) {
             Value v = ss.pop();
             Object o;
             switch (v.type) {
