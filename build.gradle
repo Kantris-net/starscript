@@ -3,11 +3,13 @@ plugins {
     id "maven-publish"
 }
 
-group "org.meteordev"
-version "0.2.5"
+group = "org.meteordev"
+version = "0.2.5"
 
 java {
-    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 
     withSourcesJar()
     withJavadocJar()
