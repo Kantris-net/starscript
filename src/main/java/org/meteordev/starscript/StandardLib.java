@@ -3,7 +3,9 @@ package org.meteordev.starscript;
 import org.meteordev.starscript.value.Value;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.IllegalFormatException;
 import java.util.Random;
 
 /** Standard library with some default functions and variables. */
@@ -38,6 +40,7 @@ public class StandardLib {
         ss.set("contains", StandardLib::contains);
         ss.set("replace", StandardLib::replace);
         ss.set("pad", StandardLib::pad);
+        ss.set("formatDateTime", StandardLib::formatDateTime);
     }
 
     // Numbers
@@ -191,4 +194,18 @@ public class StandardLib {
 
         return Value.string(new String(padded));
     }
+
+    public static Value formatDateTime(Starscript ss, int argCount) {
+        if (argCount != 1) ss.error("formatTime() requires 1 argument, got %d.", argCount);
+        try {
+            String fmt = ss.popString("Argument to formatTime(fmt) needs to be a string.");
+            SimpleDateFormat formatter = new SimpleDateFormat(fmt);
+            return Value.string(formatter.format(new Date()));
+        }
+        catch (IllegalArgumentException e) {
+            ss.error(e.toString());
+        }
+        return Value.null_();
+    }
+
 }
