@@ -20,6 +20,13 @@ repositories {
 }
 
 dependencies {
+    // JUnit 5 (JUnit Jupiter) dependencies for unit testing
+    testImplementation platform("org.junit:junit-bom:5.10.2")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    // Required runtime launcher for JUnit Platform in Gradle
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+
+    // JMH Microbenchmark dependencies
     testImplementation "org.openjdk.jmh:jmh-core:1.36"
     testImplementation "org.openjdk.jmh:jmh-generator-annprocess:1.36"
 
@@ -39,6 +46,7 @@ javadoc {
 }
 
 test {
+    useJUnitPlatform()
     failOnNoDiscoveredTests = false
 }
 
