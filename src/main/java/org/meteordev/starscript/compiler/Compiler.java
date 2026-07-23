@@ -81,11 +81,16 @@ public class Compiler implements Expr.Visitor {
     public void visitBinary(Expr.Binary expr) {
         compile(expr.getLeft());
 
-        if (expr.op == Token.Plus && (expr.getRight() instanceof Expr.String || expr.getRight() instanceof Expr.Number)) {
-            script.write(Instruction.AddConstant, expr.getRight() instanceof Expr.String ? Value.string(((Expr.String) expr.getRight()).string) : Value.number(((Expr.Number) expr.getRight()).number));
-            return;
+        if (expr.op == Token.Plus) {
+            Expr right = expr.getRight();
+            if (right instanceof Expr.String || right instanceof Expr.Number) {
+                Value v = right instanceof Expr.String ? Value.string(((Expr.String) right).string) : Value.number(((Expr.Number) right).number);
+                script.write(Instruction.AddConstant, v);
+                return;
+            }
         }
-        else compile(expr.getRight());
+
+        compile(expr.getRight());
 
         switch (expr.op) {
             case Plus:          script.write(Instruction.Add); break;
