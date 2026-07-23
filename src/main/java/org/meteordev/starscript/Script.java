@@ -4,7 +4,9 @@ import org.meteordev.starscript.value.Value;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** Compiled representation of starscript code that can be run inside {@link Starscript}. */
 public class Script {
@@ -12,6 +14,7 @@ public class Script {
     private int size;
 
     public final List<Value> constants = new ArrayList<>();
+    private final Map<Value, Integer> constantCache = new HashMap<>();
 
     private void write(int b) {
         if (size >= code.length) {
@@ -42,21 +45,16 @@ public class Script {
 
     /** Writes constant value to this script. */
     public void writeConstant(Value constant) {
-        int constantI = -1;
-
-        for (int i = 0; i < constants.size(); i++) {
-            if (constants.get(i).equals(constant)) {
-                constantI = i;
-                break;
-            }
+        Integer cached = constantCache.get(constant);
+        if (cached != null) {
+            write(cached);
+            return;
         }
 
-        if (constantI == -1) {
-            constantI = constants.size();
-            constants.add(constant);
-        }
-
-        write(constantI);
+        int index = constants.size();
+        constants.add(constant);
+        constantCache.put(constant, index);
+        write(index);
     }
 
     /** Begins a jump instruction. */
