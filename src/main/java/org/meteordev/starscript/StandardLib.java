@@ -36,6 +36,9 @@ public class StandardLib {
         ss.set("max", StandardLib::max);
         ss.set("clamp", StandardLib::clamp);
         ss.set("random", StandardLib::random);
+        ss.set("pow", StandardLib::pow);
+        ss.set("sqrt", StandardLib::sqrt);
+        ss.set("sign", StandardLib::sign);
 
         // Strings
         ss.set("string", StandardLib::string);
@@ -46,6 +49,9 @@ public class StandardLib {
         ss.set("pad", StandardLib::pad);
         ss.set("formatDateTime", StandardLib::formatDateTime);
         ss.set("format", StandardLib::format);
+        ss.set("length", StandardLib::length);
+        ss.set("trim", StandardLib::trim);
+        ss.set("substring", StandardLib::substring);
     }
 
     // Numbers
@@ -135,6 +141,25 @@ public class StandardLib {
         return Value.null_();
     }
 
+    public static Value pow(Starscript ss, int argCount) {
+        if (argCount != 2) ss.error("pow() requires 2 arguments, got %d.", argCount);
+        double exp = ss.popNumber("Second argument to pow() needs to be a number.");
+        double base = ss.popNumber("First argument to pow() needs to be a number.");
+        return Value.number(Math.pow(base, exp));
+    }
+
+    public static Value sqrt(Starscript ss, int argCount) {
+        if (argCount != 1) ss.error("sqrt() requires 1 argument, got %d.", argCount);
+        double a = ss.popNumber("Argument to sqrt() needs to be a number.");
+        return Value.number(Math.sqrt(a));
+    }
+
+    public static Value sign(Starscript ss, int argCount) {
+        if (argCount != 1) ss.error("sign() requires 1 argument, got %d.", argCount);
+        double a = ss.popNumber("Argument to sign() needs to be a number.");
+        return Value.number(Math.signum(a));
+    }
+
     // Strings
 
     private static Value string(Starscript ss, int argCount) {
@@ -193,6 +218,40 @@ public class StandardLib {
         }
 
         return Value.string(new String(padded));
+    }
+
+    public static Value length(Starscript ss, int argCount) {
+        if (argCount != 1) ss.error("length() requires 1 argument, got %d.", argCount);
+        String a = ss.popString("Argument to length() needs to be a string.");
+        return Value.number(a.length());
+    }
+
+    public static Value trim(Starscript ss, int argCount) {
+        if (argCount != 1) ss.error("trim() requires 1 argument, got %d.", argCount);
+        String a = ss.popString("Argument to trim() needs to be a string.");
+        return Value.string(a.trim());
+    }
+
+    public static Value substring(Starscript ss, int argCount) {
+        if (argCount == 2) {
+            double start = ss.popNumber("Second argument to substring() needs to be a number.");
+            String str = ss.popString("First argument to substring() needs to be a string.");
+            int beginIndex = Math.max(0, (int) start);
+            if (beginIndex >= str.length()) return Value.string("");
+            return Value.string(str.substring(beginIndex));
+        } else if (argCount == 3) {
+            double end = ss.popNumber("Third argument to substring() needs to be a number.");
+            double start = ss.popNumber("Second argument to substring() needs to be a number.");
+            String str = ss.popString("First argument to substring() needs to be a string.");
+
+            int beginIndex = Math.max(0, (int) start);
+            int endIndex = Math.min(str.length(), (int) end);
+            if (beginIndex > endIndex) return Value.string("");
+            return Value.string(str.substring(beginIndex, endIndex));
+        } else {
+            ss.error("substring() requires 2 or 3 arguments, got %d.", argCount);
+            return null;
+        }
     }
 
     // Formatters

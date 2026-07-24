@@ -52,12 +52,29 @@ public class StandardLibTest {
     }
 
     @Test
+    public void testMathPowSqrtSign() {
+        assertEquals("8", evaluate("{pow(2, 3)}"));
+        assertEquals("4", evaluate("{sqrt(16)}"));
+        assertEquals("-1", evaluate("{sign(-5.5)}"));
+        assertEquals("1", evaluate("{sign(5.5)}"));
+        assertEquals("0", evaluate("{sign(0)}"));
+    }
+
+    @Test
     public void testStringFunctions() {
         assertEquals("TEST", evaluate("{toUpper(\"test\")}"));
         assertEquals("test", evaluate("{toLower(\"TEST\")}"));
         assertEquals("true", evaluate("{contains(\"hello world\", \"world\")}"));
         assertEquals("hello java", evaluate("{replace(\"hello world\", \"world\", \"java\")}"));
         assertEquals("  abc", evaluate("{pad(\"abc\", 5)}"));
+    }
+
+    @Test
+    public void testExtendedStringFunctions() {
+        assertEquals("3", evaluate("{length(\"abc\")}"));
+        assertEquals("abc", evaluate("{trim(\"  abc  \")}"));
+        assertEquals("ell", evaluate("{substring(\"hello\", 1, 4)}"));
+        assertEquals("lo", evaluate("{substring(\"hello\", 3)}"));
     }
 
     @Test
