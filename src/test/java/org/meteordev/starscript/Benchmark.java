@@ -13,37 +13,26 @@ import org.openjdk.jmh.runner.options.TimeValue;
 import java.util.Formatter;
 import java.util.concurrent.TimeUnit;
 
-/*
+/**
+ Benchmark Comparison Analysis (Run 1 is Current with Cnt=10, Run 2 is Earlier with Cnt=3)
 
-Benchmark Comparison Analysis (Run 1 is Current with Cnt=10, Run 2 is Earlier with Cnt=3)
+ Run 1 (Current, Cnt = 10):
+ Benchmark              Mode  Cnt   Score   Error   Units
+ Benchmark.format      thrpt   10   7.092 ± 1.102  ops/us
+ Benchmark.formatter   thrpt   10   7.598 ± 0.237  ops/us
+ Benchmark.starscript  thrpt   10  11.587 ± 0.470  ops/us
+ Benchmark.format       avgt   10   0.137 ± 0.006   us/op
+ Benchmark.formatter    avgt   10   0.134 ± 0.008   us/op
+ Benchmark.starscript   avgt   10   0.088 ± 0.001   us/op
 
-Run 1 (Current, Cnt = 10):
-Benchmark              Mode  Cnt   Score    Error   Units
-Benchmark.format      thrpt   10   7.460 ±  0.115  ops/us
-Benchmark.formatter   thrpt   10   7.614 ±  0.780  ops/us
-Benchmark.starscript  thrpt   10   9.598 ±  0.522  ops/us
-Benchmark.format       avgt   10   0.130 ±  0.001   us/op
-Benchmark.formatter    avgt   10   0.131 ±  0.002   us/op
-Benchmark.starscript   avgt   10   0.104 ±  0.003   us/op
-
-Run 2 (Earlier/Original starscript, Cnt = 3):
-Benchmark              Mode  Cnt   Score    Error   Units
-Benchmark.format      thrpt    3   1.417 ±  0.766  ops/us
-Benchmark.formatter   thrpt    3   2.161 ±  0.448  ops/us
-Benchmark.starscript  thrpt    3   7.423 ±  1.771  ops/us
-Benchmark.format       avgt    3   0.707 ±  0.262  us/op
-Benchmark.formatter    avgt    3   0.469 ±  0.273  us/op
-Benchmark.starscript   avgt    3   0.141 ±  0.051  us/op
-
-Analysis & Conclusion (Accounting for Sample Count / Cnt):
-The difference in sample count (Cnt = 10 vs Cnt = 3) is critical for statistical validity.
-Run 2's lower iteration count (3) inherently leads to much higher volatility, less reliable confidence intervals,
-and wider error margins (e.g., starscript thrpt error of ±1.771).
-
-With Run 1 now representing the higher-count current dataset (Cnt = 10) and Run 2 the earlier smaller set (Cnt = 3),
-Run 1 demonstrates a massive performance improvement and significantly higher stability. However, part of the extreme
-discrepancy in the earlier run (Run 2) can be attributed to the low sample size and potential noise/insufficient warmup,
-whereas the current run (Run 1) provides a much more robust and accurate picture of peak performance.
+ Run 2 (Earlier/Original starscript, Cnt = 3):
+ Benchmark              Mode  Cnt   Score    Error   Units
+ Benchmark.format      thrpt    3   1.417 ±  0.766  ops/us
+ Benchmark.formatter   thrpt    3   2.161 ±  0.448  ops/us
+ Benchmark.starscript  thrpt    3   7.423 ±  1.771  ops/us
+ Benchmark.format       avgt    3   0.707 ±  0.262  us/op
+ Benchmark.formatter    avgt    3   0.469 ±  0.273  us/op
+ Benchmark.starscript   avgt    3   0.141 ±  0.051  us/op
  */
 
 @BenchmarkMode({Mode.AverageTime, Mode.Throughput})
@@ -67,7 +56,6 @@ public class Benchmark {
     public final String starscriptSource = "FPS: {round(fps)}";
 
     public StringBuilder sb;
-
     private Formatter formatter;
 
     public Script script;
@@ -77,12 +65,11 @@ public class Benchmark {
     public void setup() {
         sb = new StringBuilder();
 
-        // Format
+        // Standard Formatter Setup
         formatter = new Formatter(sb);
 
-        // Starscript
+        // Starscript Setup
         script = Compiler.compile(Parser.parse(starscriptSource));
-
         ss = new Starscript();
         StandardLib.init(ss);
         ss.set("name", "MineGame159");
@@ -102,6 +89,7 @@ public class Benchmark {
 
     @org.openjdk.jmh.annotations.Benchmark
     public void starscript(Blackhole bh) {
+        sb.setLength(0);
         bh.consume(ss.run(script, sb).toString());
     }
 }
