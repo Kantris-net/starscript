@@ -52,12 +52,13 @@ public class StandardLibTest {
     }
 
     @Test
-    public void testMathPowSqrtSign() {
+    public void testMathPowSqrtSignMod() {
         assertEquals("8", evaluate("{pow(2, 3)}"));
         assertEquals("4", evaluate("{sqrt(16)}"));
         assertEquals("-1", evaluate("{sign(-5.5)}"));
         assertEquals("1", evaluate("{sign(5.5)}"));
         assertEquals("0", evaluate("{sign(0)}"));
+        assertEquals("1", evaluate("{mod(5, 2)}"));
     }
 
     @Test

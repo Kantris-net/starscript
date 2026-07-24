@@ -39,6 +39,7 @@ public class StandardLib {
         ss.set("pow", StandardLib::pow);
         ss.set("sqrt", StandardLib::sqrt);
         ss.set("sign", StandardLib::sign);
+        ss.set("mod", StandardLib::mod);
 
         // Strings
         ss.set("string", StandardLib::string);
@@ -160,6 +161,13 @@ public class StandardLib {
         return Value.number(Math.signum(a));
     }
 
+    public static Value mod(Starscript ss, int argCount) {
+        if (argCount != 2) ss.error("mod() requires 2 arguments, got %d.", argCount);
+        double b = ss.popNumber("Second argument to mod() needs to be a number.");
+        double a = ss.popNumber("First argument to mod() needs to be a number.");
+        return Value.number(a % b);
+    }
+
     // Strings
 
     private static Value string(Starscript ss, int argCount) {
@@ -252,6 +260,28 @@ public class StandardLib {
             ss.error("substring() requires 2 or 3 arguments, got %d.", argCount);
             return null;
         }
+    }
+
+    public static Value indexOf(Starscript ss, int argCount) {
+        if (argCount != 2) ss.error("indexOf() requires 2 arguments, got %d.", argCount);
+        String search = ss.popString("Second argument to indexOf() needs to be a string.");
+        String str = ss.popString("First argument to indexOf() needs to be a string.");
+        return Value.number(str.indexOf(search));
+    }
+
+    public static Value startsWith(Starscript ss, int argCount) {
+        if (argCount != 2) ss.error("startsWith() requires 2 arguments, got %d.", argCount);
+        String prefix = ss.popString("Second argument to startsWith() needs to be a string.");
+        String str = ss.popString("First argument to startsWith() needs to be a string.");
+        return Value.bool(str.startsWith(prefix));
+    }
+
+    // utility
+
+    public static Value type(Starscript ss, int argCount) {
+        if (argCount != 1) ss.error("type() requires 1 argument, got %d.", argCount);
+        Value v = ss.pop();
+        return Value.string(v.type.name().toLowerCase());
     }
 
     // Formatters
