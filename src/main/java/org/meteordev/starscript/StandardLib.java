@@ -53,6 +53,8 @@ public class StandardLib {
         ss.set("length", StandardLib::length);
         ss.set("trim", StandardLib::trim);
         ss.set("substring", StandardLib::substring);
+
+        ss.set("distance", StandardLib::distance);
     }
 
     // Numbers
@@ -282,6 +284,36 @@ public class StandardLib {
         if (argCount != 1) ss.error("type() requires 1 argument, got %d.", argCount);
         Value v = ss.pop();
         return Value.string(v.type.name().toLowerCase());
+    }
+
+    public static Value distance(Starscript ss, int argCount) {
+        if (argCount != 4 && argCount != 6) {
+            ss.error("distance() requires 4 or 6 arguments, got %d.", argCount);
+            return null;
+        }
+
+        if (argCount == 4) {
+            double z2 = ss.popNumber("Fourth argument to distance() needs to be a number.");
+            double x2 = ss.popNumber("Third argument to distance() needs to be a number.");
+            double z1 = ss.popNumber("Second argument to distance() needs to be a number.");
+            double x1 = ss.popNumber("First argument to distance() needs to be a number.");
+
+            double dx = x2 - x1;
+            double dz = z2 - z1;
+            return Value.number(Math.hypot(dx, dz));
+        } else {
+            double z2 = ss.popNumber("Sixth argument to distance() needs to be a number.");
+            double y2 = ss.popNumber("Fifth argument to distance() needs to be a number.");
+            double x2 = ss.popNumber("Fourth argument to distance() needs to be a number.");
+            double z1 = ss.popNumber("Third argument to distance() needs to be a number.");
+            double y1 = ss.popNumber("Second argument to distance() needs to be a number.");
+            double x1 = ss.popNumber("First argument to distance() needs to be a number.");
+
+            double dx = x2 - x1;
+            double dy = y2 - y1;
+            double dz = z2 - z1;
+            return Value.number(Math.sqrt(dx * dx + dy * dy + dz * dz));
+        }
     }
 
     // Formatters

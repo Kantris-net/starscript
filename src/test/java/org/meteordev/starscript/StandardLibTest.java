@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.meteordev.starscript.compiler.Compiler;
 import org.meteordev.starscript.compiler.Parser;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class StandardLibTest {
 
@@ -82,4 +83,20 @@ public class StandardLibTest {
     public void testFormatFunction() {
         assertEquals("Value: 42.000000", evaluate("{format(\"Value: %f\", 42)}"));
     }
+
+    @Test
+    public void testDistance() {
+        // 2D Distance: from (0, 0) to (3, 4) -> Hypotenuse ist 5.0
+        assertEquals("5", evaluate("{distance(0, 0, 3, 4)}"));
+
+        // 3D Distance: from (0, 0, 0) to (0, 3, 4) -> 5.0
+        assertEquals("5", evaluate("{distance(0, 0, 0, 0, 3, 4)}"));
+    }
+
+    @Test
+    public void testLargeDistance() {
+        assertEquals("69420", evaluate("{distance(3540, 330, 72960, 330)}"));
+        assertEquals("314159", evaluate("{distance(23211, 4959, 0, 337370, 4959, 0)}"));
+    }
+
 }
